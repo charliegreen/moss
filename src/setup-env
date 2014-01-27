@@ -1,0 +1,6 @@
+#!/bin/bash
+echo "Adding moss cross-compiler bin directory to PATH"
+export PATH="$PATH:/home/charlie/dev/moss/cross-compiler/bin"
+
+echo "Adding variable LD_PRELOAD, in order to fix a bug in Bochs"
+export LD_PRELOAD="/usr/lib/x86_64-linux-gnu/libXpm.so.4"
