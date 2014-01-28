@@ -9,7 +9,7 @@
 #include "paging.h"
 #include "heap.h"
 
-// local prototypes
+// local prototypes go here:
 static void kernel_welcome(void);
 
 static void kernel_welcome(void){
