@@ -195,7 +195,7 @@ __getCR\i:
 .endm
 
 GET_CRN 0
-GET_CRN 1
+#GET_CRN 1
 GET_CRN 2
 GET_CRN 3
 GET_CRN 4
@@ -213,9 +213,7 @@ _start:
 	# in %ebx, so we need to pass these to kernel_main on the stack.
 	pushl %eax
 	pushl %ebx
-	# DO NOT MODIFY THE STACK AFTER THIS POINT.
 
-	#cli
 	call kernel_main
 
 label_hang:
