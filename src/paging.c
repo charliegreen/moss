@@ -110,7 +110,7 @@ void paging_initialize(void){
     // Here we identity-map kernel memory so that virtual memory is the same
     // as physical memory. This makes our lives far easier.
     for(uint32_t i=0; i < _heapAddress; i+=0x1000){
-	paging_allocFrame(paging_getPage(i,1,kdir),0,0); // readable but non-writable to userspace
+	paging_allocFrame(paging_getPage(i,true,kdir),false,false); // readable but non-writable to userspace
 	if(i/0x1000 % 256 == 0){
 	    console_print("    256 pages [last 0x");
 	    console_printNum(i/0x1000,16);

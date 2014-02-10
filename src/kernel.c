@@ -55,7 +55,7 @@ void kernel_main(__UNUSED uint32_t a, __UNUSED uint32_t magic){
     console_printNum(heap_getHeapAddress(), 16);
     console_print("\n");
     
-    //KERNEL_INIT(paging);
+    KERNEL_INIT(paging,);
     
     //paging_initialize();
     //console_printOk("Initialized paging\n");
@@ -69,6 +69,11 @@ void kernel_main(__UNUSED uint32_t a, __UNUSED uint32_t magic){
     // DONE INITIALIZING OS
     //================================
 
+    console_printInfo("Now testing page fault handler....\n");
+    uint8_t*ptr = (uint8_t*)0xA0000000;
+    __UNUSED uint8_t hcf = *ptr;
+    console_printInfo("This should not print!!\n");
+    
     while(true)
 	hlt();
 

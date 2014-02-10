@@ -44,4 +44,6 @@ uint32_t kamalloc(uint32_t size);
 uint32_t kpmalloc(uint32_t size, uint32_t phys);
 uint32_t kapmalloc(uint32_t size, uint32_t phys);
 
+void printCR0(void);
+
 #endif

@@ -119,3 +119,24 @@ uint32_t kpmalloc (uint32_t size, uint32_t phys){
 uint32_t kapmalloc(uint32_t size, uint32_t phys){
     return heap_allocate(size, true,  phys);
 }
+
+// Prints CR0 in a readable fashion. For further information, see the AMD64 Architecture
+// Programmer's Manual Volume 2: System Programming entry on CR0, beginning on page 42.
+// You can find this entry on page 90 of this PDF:
+// http://developer.amd.com/wordpress/media/2012/10/24593_APM_v21.pdf
+void printCR0(void){
+    uint32_t cr0 = __getCR0();
+    console_print("[CR0:");
+    if(cr0 & 1<<31) console_print(" PG"); // paging enabled
+    if(cr0 & 1<<30) console_print(" CD"); // cache disabled
+    if(cr0 & 1<<29) console_print(" NW"); // not writethrough
+    if(cr0 & 1<<18) console_print(" AM"); // alignment mask
+    if(cr0 & 1<<16) console_print(" WP"); // write protect
+    if(cr0 & 1<< 5) console_print(" NE"); // numeric error
+    if(cr0 & 1<< 4) console_print(" ET"); // extension type
+    if(cr0 & 1<< 3) console_print(" TS"); // task switched
+    if(cr0 & 1<< 2) console_print(" EM"); // emulation
+    if(cr0 & 1<< 1) console_print(" MP"); // monitor coprocessor
+    if(cr0 & 1<< 0) console_print(" PE"); // protection enabled
+    console_print("]");
+}
