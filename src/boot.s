@@ -200,6 +200,21 @@ GET_CRN 2
 GET_CRN 3
 GET_CRN 4
 
+# Some debugging functions to do with stack placement.
+	.global __get_stack_bottom
+	.type __get_stack_bottom, @function
+__get_stack_bottom:
+	movl	$stack_bottom, %eax
+	ret
+	.size __get_stack_bottom, .-__get_stack_bottom
+
+	.global __get_stack_top
+	.type __get_stack_top, @function
+__get_stack_top:
+	movl	$stack_top, %eax
+	ret
+	.size __get_stack_top, .-__get_stack_top
+
 # ================================================================
 # _start is the entry point for our kernel
 # ================================================================	

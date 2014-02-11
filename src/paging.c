@@ -111,8 +111,8 @@ void paging_initialize(void){
     // as physical memory. This makes our lives far easier.
     for(uint32_t i=0; i < _heapAddress; i+=0x1000){
 	paging_allocFrame(paging_getPage(i,true,kdir),false,false); // readable but non-writable to userspace
-	if(i/0x1000 % 256 == 0){
-	    console_print("    256 pages [last 0x");
+	if(i/0x1000 % 64 == 0 && i){
+	    console_print("    64 pages [last 0x");
 	    console_printNum(i/0x1000,16);
 	    console_print("] now alloc'd\n");
 	}
@@ -126,27 +126,33 @@ void paging_initialize(void){
 
 void paging_switchPageDirectory(page_directory_t *dir){
     _currentDirectory = dir;
-    asm volatile("mov %0, %%cr3":: "r"(&dir->tablesPhysical));
+    
+    uint32_t cr3 = (uint32_t)(&dir->tablesPhysical);
+    console_print("CR3: ");
+    console_printNum(cr3, 16);
+    asm volatile("mov %0, %%cr3":: "r"(cr3));
+    
     uint32_t cr0;
     asm volatile("mov %%cr0, %0": "=r"(cr0));
     cr0 |= 0x80000000; // Enable paging!
-    asm volatile("mov %0, %%cr0":: "r"(cr0));
+    //asm volatile("mov %0, %%cr0":: "r"(cr0));
 }
 
-page_t *paging_getPage(uint32_t address, bool make, page_directory_t *dir){
-    address /= 0x1000; // Turn the address into an index.
+page_t*paging_getPage(uint32_t address, bool make, page_directory_t*dir){
+    uint32_t page_index = address/0x1000;
+    //address /= 0x1000; // Turn the address into an index.
     
     // Find the page table containing this address.
-    uint32_t table_idx = address / 1024; // 1024 entries in page_directory_t->tables
+    uint32_t table_idx = page_index/1024; // 1024 entries in page_directory_t->tables
     
-    if (dir->tables[table_idx]) // If this table is already assigned
-	return &dir->tables[table_idx]->pages[address%1024];
+    if(dir->tables[table_idx]) // If this table is already assigned
+	return &dir->tables[table_idx]->pages[page_index%1024];
     else if(make){
-	    uint32_t phys;
-	    dir->tables[table_idx] = (page_table_t*)kapmalloc(sizeof(page_table_t), (uint32_t)&phys);
-	    memset(dir->tables[table_idx], 0, 0x1000);
-	    dir->tablesPhysical[table_idx] = phys | 0x7; // present, read-write, user-accessible
-	    return &dir->tables[table_idx]->pages[address%1024];
+	uint32_t phys;
+	dir->tables[table_idx] = (page_table_t*)kapmalloc(sizeof(page_table_t), (uint32_t)&phys);
+	memset(dir->tables[table_idx], 0, 0x1000);
+	dir->tablesPhysical[table_idx] = phys | 0x7; // present, read-write, user-accessible
+	return &dir->tables[table_idx]->pages[page_index%1024];
     }else
 	return 0;
 }

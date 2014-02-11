@@ -181,7 +181,8 @@ void desctab_isrHandler(registers_t regs){
 	    console_printNum(regs.err_code,16);
 	}
 	console_putChar('\n');
-	//console_printWarn("04THIS DAMAGES MY CALM.\n");	
+	//console_printWarn("04THIS DAMAGES MY CALM.\n");
+	hang();
     }
 }
 

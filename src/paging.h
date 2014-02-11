@@ -26,7 +26,7 @@ typedef struct{
     // location, for loading into the CR3 register.
     uint32_t tablesPhysical[1024];
 
-    uint32_t physicalAddr;  // The physical address of tablesPhysical.
+    //uint32_t physicalAddr;  // The physical address of tablesPhysical.
 } page_directory_t;
 
 void paging_initialize(void);

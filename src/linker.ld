@@ -9,6 +9,7 @@ SECTIONS
 	/* Begin putting sections at 1 MiB, a conventional place for kernels
 	   to be loaded at by the bootloader. */
 	. = 1M;
+	_kernelStart = .;
 
 	/* First put the multiboot header, as it is required to be put very
 	   early in the image or the bootloader won't recognize the file
@@ -32,7 +33,7 @@ SECTIONS
 	}
 
 	/* Read-write data (uninitialized) and stack */
-	.bss BLOCK(4K) : ALIGN(4K)
+	.bss BLOCK(20K) : ALIGN(4K)
 	{
 		*(COMMON)
 		*(.bss)
@@ -43,5 +44,6 @@ SECTIONS
 	   them in a segment with the same name. Simply add stuff here as
 	   needed. */
 
-	_end = .; /* The end of the kernel. This is where we put our heap. */
+	   /* The end of the kernel. This is where we put our heap. */
+	_kernelEnd = .;
 }

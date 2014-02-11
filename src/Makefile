@@ -15,11 +15,11 @@ HDRFILES := $(shell find . -type f -name '*.h')
 AUXFILES := ./Makefile ./README
 ALLFILES := $(CFILES) $(SFILES) $(HDRFILES) $(AUXFILES)
 
-.PHONY: all clean iso run run-iso dist gdb
+.PHONY: all clean iso run run-iso dist gdb dump
 
 all: moss.bin
 
-moss.bin: $(OFILES)
+moss.bin: $(OFILES) linker.ld
 	@i586-elf-gcc -T linker.ld -o $@ $(LDFLAGS) $(OFILES)
 
 boot.o: boot.s
@@ -54,3 +54,6 @@ dist: $(ALLFILES)
 gdb: moss.bin
 	@qemu-system-i386 -s -kernel moss.bin &
 	@gdb -x remote.gdb
+
+dump: moss.bin
+	@objdump -D moss.bin > dump
