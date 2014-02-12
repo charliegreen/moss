@@ -49,37 +49,7 @@ uint8_t ctox(char c){
 	return 0xFF;
 }
 
-/*
-void printNum(uint32_t num, uint32_t radix){
-    if(num==0){
-	console_putChar('0');
-	return;
-    }else if(radix==1){
-	for(size_t i=0; i<num; i++)
-	    console_putChar('0');
-	return;
-    }
-
-    uint16_t log = 0;
-    for(uint32_t foo=num; foo>0; log++)
-	foo/=radix;
-	
-    uint8_t digits[log];
-
-    uint32_t exp = 1;
-    for(size_t i=0; i<log; i++){
-	digits[i] = (num/exp)%radix;
-	exp*=radix;
-    }
-
-    for(size_t i=log; i>0; i--)
-	console_putChar((digits[i-1]<10)  ?
-			(digits[i-1]+'0') :
-			(digits[i-1]+'A'-10));
-}
-*/
-
-void hlt(void){
+void halt(void){
     statusbar_setRunningFlag(BLOCKING);
     asm("hlt");
     statusbar_setRunningFlag(RUNNING);

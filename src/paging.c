@@ -24,7 +24,7 @@ static bool pageFaultHandler(registers_t regs);
 //================================
 // local functions
 static void setFrame(uint32_t frameAddr, bool used){
-    uint32_t frameNum = frameAddr/0x1000;
+    uint32_t frameNum = frameAddr/PAGING_PAGE_SIZE;
     uint32_t frameIdx = BITMAP_IDX(frameNum);
     uint16_t frameOff = BITMAP_OFF(frameNum);
     if(used)
@@ -35,7 +35,7 @@ static void setFrame(uint32_t frameAddr, bool used){
 
 __UNUSED
 static bool getFrame(uint32_t frameAddr){
-    uint32_t frameNum = frameAddr/0x1000;
+    uint32_t frameNum = frameAddr/PAGING_PAGE_SIZE;
     uint32_t frameIdx = BITMAP_IDX(frameNum);
     uint16_t frameOff = BITMAP_OFF(frameNum);
     return _frames[frameIdx] & (1<<frameOff);
@@ -98,7 +98,7 @@ void paging_initialize(void){
     // The size of physical memory. We assume it's 16MB.
     const uint32_t kLastPage = 0x1000000;
 
-    _numFrames = kLastPage/0x1000;
+    _numFrames = kLastPage/PAGING_PAGE_SIZE;
     _frames = (uint32_t*)kmalloc(BITMAP_IDX(_numFrames));
     memset(_frames, 0, BITMAP_IDX(_numFrames));
     
@@ -109,11 +109,11 @@ void paging_initialize(void){
     
     // Here we identity-map kernel memory so that virtual memory is the same
     // as physical memory. This makes our lives far easier.
-    for(uint32_t i=0; i < _heapAddress; i+=0x1000){
+    for(uint32_t i=0; i < _heapAddress; i+=PAGING_PAGE_SIZE){
 	paging_allocFrame(paging_getPage(i,true,kdir),false,false); // readable but non-writable to userspace
-	if(i/0x1000 % 64 == 0 && i){
+	if(i/PAGING_PAGE_SIZE % 64 == 0 && i){
 	    console_print("    64 pages [last 0x");
-	    console_printNum(i/0x1000,16);
+	    console_printNum(i/PAGING_PAGE_SIZE,16);
 	    console_print("] now alloc'd\n");
 	}
     }
@@ -128,18 +128,16 @@ void paging_switchPageDirectory(page_directory_t *dir){
     _currentDirectory = dir;
     
     uint32_t cr3 = (uint32_t)(&dir->tablesPhysical);
-    console_print("CR3: ");
-    console_printNum(cr3, 16);
     asm volatile("mov %0, %%cr3":: "r"(cr3));
     
     uint32_t cr0;
     asm volatile("mov %%cr0, %0": "=r"(cr0));
     cr0 |= 0x80000000; // Enable paging!
-    //asm volatile("mov %0, %%cr0":: "r"(cr0));
+    asm volatile("mov %0, %%cr0":: "r"(cr0));
 }
 
 page_t*paging_getPage(uint32_t address, bool make, page_directory_t*dir){
-    uint32_t page_index = address/0x1000;
+    uint32_t page_index = address/PAGING_PAGE_SIZE;
     //address /= 0x1000; // Turn the address into an index.
     
     // Find the page table containing this address.
@@ -150,8 +148,14 @@ page_t*paging_getPage(uint32_t address, bool make, page_directory_t*dir){
     else if(make){
 	uint32_t phys;
 	dir->tables[table_idx] = (page_table_t*)kapmalloc(sizeof(page_table_t), (uint32_t)&phys);
-	memset(dir->tables[table_idx], 0, 0x1000);
+	memset(dir->tables[table_idx], 0, sizeof(page_table_t));
 	dir->tablesPhysical[table_idx] = phys | 0x7; // present, read-write, user-accessible
+
+	console_print("  allocated page table for 0x");
+	console_printNum(address, 16);
+	console_print(" at 0x");
+	console_printNum(phys, 16);
+	console_print("\n");
 	return &dir->tables[table_idx]->pages[page_index%1024];
     }else
 	return 0;
@@ -163,7 +167,7 @@ void paging_allocFrame(page_t*page, bool kernel, bool writable){
     uint32_t frameIndex = getFreeFrame();
     if(frameIndex==0xffffffff)
 	HCF("Could not allocate frame; no frames are available!");
-    setFrame(frameIndex*0x1000, true); // CLAIM'D
+    setFrame(frameIndex*PAGING_PAGE_SIZE, true); // CLAIM'D
     page->present = 1;
     page->rw      = writable?1:0;
     page->user    = kernel?0:1;

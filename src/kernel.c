@@ -9,25 +9,9 @@
 #include "paging.h"
 #include "heap.h"
 
-// local prototypes go here:
-static void kernel_welcome(void);
-
 // global variables:
 extern uint32_t _kernelStart;	// defined in linker.ld
 extern uint32_t _kernelEnd;
-
-static void kernel_welcome(void){
-    console_printInfo("Booted 20");
-    console_print(OS_NAME);
-    console_print("70, by 50Charlie Green\n");
-    //console_printInfo("20Moss70 began development on Jul 26 2013.\n");
-    console_printInfo("This version was built on ");
-    console_print(__DATE__);
-    console_print(" at ");
-    console_print(__TIME__);
-    console_print(" PST.\n");
-    //console_printInfo("It's kind of really super duper exciting!\n");
-}
 
 void kernel_main(__UNUSED uint32_t a, __UNUSED uint32_t magic){
     desctab_initialize();
@@ -78,18 +62,25 @@ void kernel_main(__UNUSED uint32_t a, __UNUSED uint32_t magic){
     
     KERNEL_INIT(paging,);
     
-    //paging_initialize();
-    //console_printOk("Initialized paging\n");
+    //================================
+    // Print the welcome message!
+    console_printInfo("Booted 20");
+    console_print(OS_NAME);
+    console_print("70, by 50Charlie Green\n");
+    //console_printInfo("20Moss70 began development on Jul 26 2013.\n");
+    console_printInfo("This version was built on ");
+    console_print(__DATE__);
+    console_print(" at ");
+    console_print(__TIME__);
+    console_print(" PST.\n");
     
-    kernel_welcome();
-    
-    // enable IRQs
-    asm volatile ("sti");
+    asm volatile ("sti");	// enable IRQs
     
     //================================
     // DONE INITIALIZING OS
     //================================
 
+    // Print some information on memory usage, for debugging paging
     console_printInfo("Kernel goes from 0x");
     console_printNum((uint32_t)&_kernelStart, 16);
     console_print(" to 0x");
@@ -99,16 +90,23 @@ void kernel_main(__UNUSED uint32_t a, __UNUSED uint32_t magic){
     console_print("=");
     console_printNum((uint32_t)&_kernelEnd-(uint32_t)&_kernelStart, 10);
     console_print("\n");
-    
-    /*
+
+    console_printInfo("Space between _kernelEnd and stack_top: 0x");
+    console_printNum((uint32_t)&_kernelEnd-__get_stack_top(), 16);
+    console_print("\n");
+
+    console_printInfo("Heap allocated up to: 0x");
+    console_printNum(heap_getHeapAddress(), 16);
+    console_print("\n");
+
     console_printInfo("Now testing page fault handler....\n");
-    uint8_t*ptr = (uint8_t*)0xA0000000;
-    __UNUSED uint8_t hcf = *ptr;
-    console_printInfo("This should not print!!\n");
-    */
+    uint8_t*ptr = (uint8_t*)0x10000000;
+    uint8_t hcf = *ptr;
+    console_printInfo("50This should not print!!\n");
+    console_printNum(hcf, 10);
     
     while(true)
-	hlt();
+	halt();
 
     //================================
     console_printInfo("40Now halting70\n");

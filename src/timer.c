@@ -80,5 +80,5 @@ void timer_sleep(uint32_t ms){
     // Even if _tick overflows, our addition here will too, so we get the
     // proper and expected behavior (I think; I haven't tested this). TODO?
     while(_tick != now+numTicks)
-	hlt();
+	halt();
 }

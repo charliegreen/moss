@@ -14,9 +14,10 @@ static void idt_set_gate(uint8_t num, uint32_t base, uint16_t sel,
 static void init_idt(void);
 static bool doesIntHaveErrCode(uint8_t num);
 
-static bool isr0 (registers_t regs);
-static bool isr1 (registers_t regs);
-static bool isr13(registers_t regs);
+static bool isr0 (registers_t regs); // division by zero
+static bool isr1 (registers_t regs); // debug exception
+static bool isr8 (registers_t regs); // double fault
+static bool isr13(registers_t regs); // general protection fault
 
 //================================
 // GDT
@@ -147,6 +148,7 @@ static void init_idt(void){
 
     desctab_registerIntHandler(0 , isr0 );
     desctab_registerIntHandler(1 , isr1 );
+    desctab_registerIntHandler(8 , isr8 );
     desctab_registerIntHandler(13, isr13);
     
     __flush_idt((uint32_t)&_idt_ptr);
@@ -228,7 +230,7 @@ static bool isr0(__UNUSED registers_t regs){
     return false;
 }
 
-static bool isr1 (registers_t regs){
+static bool isr1(registers_t regs){
     console_printInfo("Dumping state. Printing passed registers:");
 
     console_print("\n\teax: 0x");
@@ -268,6 +270,13 @@ static bool isr1 (registers_t regs){
 
     console_putChar('\n');
     return true;
+}
+
+static bool isr8(registers_t regs){
+    console_printErr("Double Fault: Error code: 0x");
+    console_printNum(regs.err_code,16);
+    hang();
+    return false;
 }
 
 static bool isr13(registers_t regs){

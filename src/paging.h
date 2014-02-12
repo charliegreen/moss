@@ -3,6 +3,8 @@
 
 #include "common.h"
 
+#define PAGING_PAGE_SIZE 0x1000
+
 // Note that we have to specify int here because the compiler spews about
 // uint32_t being a GCC extension and errors if there is no type
 typedef struct{

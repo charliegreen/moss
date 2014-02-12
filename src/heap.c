@@ -11,7 +11,7 @@ uint32_t heap_allocate(uint32_t size, bool align, uint32_t phys){
 	_heapAddress &= 0xfffff000;
     }
     if(phys)
-	*(uint8_t*)phys = _heapAddress;
+	*(uint32_t*)phys = _heapAddress;
 
     uint32_t addr = _heapAddress;
     _heapAddress += size;
