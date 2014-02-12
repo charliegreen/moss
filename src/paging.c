@@ -111,14 +111,16 @@ void paging_initialize(void){
     // as physical memory. This makes our lives far easier.
     for(uint32_t i=0; i < _heapAddress; i+=PAGING_PAGE_SIZE){
 	paging_allocFrame(paging_getPage(i,true,kdir),false,false); // readable but non-writable to userspace
+	/*
 	if(i/PAGING_PAGE_SIZE % 64 == 0 && i){
 	    console_print("    64 pages [last 0x");
 	    console_printNum(i/PAGING_PAGE_SIZE,16);
 	    console_print("] now alloc'd\n");
 	}
+	*/
     }
 
-    console_print("  initialized kernel identity-mapping\n");
+    //console_print("  initialized kernel identity-mapping!\n");
     
     desctab_registerIntHandler(14, pageFaultHandler);
     paging_switchPageDirectory(kdir);
@@ -151,11 +153,13 @@ page_t*paging_getPage(uint32_t address, bool make, page_directory_t*dir){
 	memset(dir->tables[table_idx], 0, sizeof(page_table_t));
 	dir->tablesPhysical[table_idx] = phys | 0x7; // present, read-write, user-accessible
 
+	/*
 	console_print("  allocated page table for 0x");
 	console_printNum(address, 16);
 	console_print(" at 0x");
 	console_printNum(phys, 16);
 	console_print("\n");
+	*/
 	return &dir->tables[table_idx]->pages[page_index%1024];
     }else
 	return 0;

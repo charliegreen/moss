@@ -55,10 +55,6 @@ void kernel_main(__UNUSED uint32_t a, __UNUSED uint32_t magic){
     console_printOk("Read time from CMOS: ");
     cmos_printTime();
     console_putChar('\n');
-
-    console_printInfo("Heap memory begins at 0x");
-    console_printNum(heap_getHeapAddress(), 16);
-    console_print("\n");
     
     KERNEL_INIT(paging,);
     
@@ -90,11 +86,6 @@ void kernel_main(__UNUSED uint32_t a, __UNUSED uint32_t magic){
     console_print("=");
     console_printNum((uint32_t)&_kernelEnd-(uint32_t)&_kernelStart, 10);
     console_print("\n");
-
-    console_printInfo("Space between _kernelEnd and stack_top: 0x");
-    console_printNum((uint32_t)&_kernelEnd-__get_stack_top(), 16);
-    console_print("\n");
-
     console_printInfo("Heap allocated up to: 0x");
     console_printNum(heap_getHeapAddress(), 16);
     console_print("\n");
