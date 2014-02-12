@@ -77,6 +77,7 @@ void kernel_main(__UNUSED uint32_t a, __UNUSED uint32_t magic){
     //================================
 
     // Print some information on memory usage, for debugging paging
+    console_print("\n");
     console_printInfo("Kernel goes from 0x");
     console_printNum((uint32_t)&_kernelStart, 16);
     console_print(" to 0x");
@@ -89,12 +90,6 @@ void kernel_main(__UNUSED uint32_t a, __UNUSED uint32_t magic){
     console_printInfo("Heap allocated up to: 0x");
     console_printNum(heap_getHeapAddress(), 16);
     console_print("\n");
-
-    console_printInfo("Now testing page fault handler....\n");
-    uint8_t*ptr = (uint8_t*)0x10000000;
-    uint8_t hcf = *ptr;
-    console_printInfo("50This should not print!!\n");
-    console_printNum(hcf, 10);
     
     while(true)
 	halt();
