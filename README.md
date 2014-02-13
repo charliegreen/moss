@@ -25,6 +25,16 @@ Longer term:
 
 ## changelog
 
+### Moss v0.4 (current revision; unstable):
+
+* Rudimentary memory management
+	* kmalloc() implemented as a allocation-by-placement-address pointer-incrementing system
+	* various tools and such for determining memory layout
+* Paging code (4-KiB page size; non-PAE)
+	* working (and helpful!) page-fault handler
+* Some functions helpful for debugging
+* Performance boosts everywhere and random minor bugfixes
+
 ### Moss v0.3:
 
 * Complete rewrite of all existing code (except multiboot)
