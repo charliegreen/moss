@@ -4,7 +4,7 @@
 Moss is an i386 custom RTOS I'm writing as a hobby! :D I started writing it on 26 Jul 2013, and have been working on it on and off ever since. Thanks to the help from [OSDev](http://wiki.osdev.org/Main_Page)!
 
 ## building
-To build, you'll first need an [i586 cross-compiler](http://wiki.osdev.org/GCC_Cross-Compiler), and all of its handy doodads, in your PATH somewhere. You'll also need to install QEMU, or set up a similar virtual machine like Bochs, to run it (unless you want to boot on actual hardware, which, to my knowledge, has never been tried). The Makefile should take care of the rest for you.
+To build, you'll first need an [i586 cross-compiler](http://wiki.osdev.org/GCC_Cross-Compiler), and all of its handy doodads, in your PATH somewhere. You'll also need to install QEMU, or set up a similar virtual machine like Bochs, to run it (unless you want to boot on actual hardware, which I do not recommend; I'm still working out how to get it to fully boot on my laptop). The Makefile should take care of the rest for you.
 
 ## to do
 
