@@ -139,7 +139,7 @@ void paging_switchPageDirectory(page_directory_t *dir){
 }
 
 void paging_setPSE(__UNUSED bool on){
-    //TODO add function body, so we can have pages that aren't 4K
+    //TODO add function body, so we can have pages that aren't 4K; do we even want this?
 }
 
 page_t*paging_getPage(uint32_t address, bool make, page_directory_t*dir){
