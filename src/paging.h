@@ -33,7 +33,9 @@ typedef struct{
 
 void paging_initialize(void);
 page_t*paging_getPage(uint32_t address, bool make, page_directory_t*dir);
+
 void paging_switchPageDirectory(page_directory_t *dir);
+void paging_setPSE(bool on);
 
 void paging_allocFrame(page_t*page, bool kernel, bool writable);
 void paging_freeFrame(page_t*page);

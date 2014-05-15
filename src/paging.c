@@ -138,6 +138,10 @@ void paging_switchPageDirectory(page_directory_t *dir){
     asm volatile("mov %0, %%cr0":: "r"(cr0));
 }
 
+void paging_setPSE(__UNUSED bool on){
+    //TODO add function body, so we can have pages that aren't 4K
+}
+
 page_t*paging_getPage(uint32_t address, bool make, page_directory_t*dir){
     uint32_t page_index = address/PAGING_PAGE_SIZE;
     //address /= 0x1000; // Turn the address into an index.

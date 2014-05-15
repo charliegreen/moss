@@ -55,9 +55,6 @@ bool _leftShift, _rightShift, _capsLock;
 // All local prototypes
 static void drainInput(void);
 static bool irq1(registers_t regs);
-//static bool isCommAcked(void);
-//static void flushOutput(void);
-//static void flushInput(void);
 
 //================================
 // Local function definitions
@@ -90,32 +87,12 @@ static bool irq1(__UNUSED registers_t regs){
     return true;
 }
 
-/*
-static bool isCommAcked(void){
-    return inb(KEYBOARD_DATA_PORT) == KEYBOARD_COMM_ACK;
-}
-
-// Flush keyboard's buffer so we can write
-static void flushOutput(void){
-    while(true)
-	if(! (inb(KEYBOARD_STAT_PORT) & KEYBOARD_WRITE_READY))
-	    break;
-}
-
-// Flush keyboard's buffer so we can read
-static void flushInput(void){
-    while(true)
-	if(! (inb(KEYBOARD_STAT_PORT) & KEYBOARD_READ_READY))
-	    break;
-}
-*/
-
 //================================
 // Global function definitions
 
 void keyboard_initialize(void){
     desctab_registerIntHandler(IRQ1, irq1);
-    drainInput();
+    //drainInput();
 }
 
 uint8_t keyboard_scanByte(void){
