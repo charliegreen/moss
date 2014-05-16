@@ -59,6 +59,7 @@ static bool irq1(registers_t regs);
 //================================
 // Local function definitions
 
+__UNUSED
 static void drainInput(void){
     uint8_t b = inb(KEYBOARD_STAT_PORT);
     while(b & KEYBOARD_READ_READY){

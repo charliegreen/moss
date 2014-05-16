@@ -34,6 +34,7 @@ void kernel_main(__UNUSED uint32_t a, __UNUSED uint32_t magic){
     console_printNum(st, 16);
     console_print("\ndiff: 0x");
     console_printNum(st-sb, 16);
+    console_putChar('\n');
     */
     
     // initialize various parts of the kernel, and print progress to screen
@@ -90,7 +91,7 @@ void kernel_main(__UNUSED uint32_t a, __UNUSED uint32_t magic){
     console_printInfo("Heap allocated up to: 0x");
     console_printNum(heap_getHeapAddress(), 16);
     console_print("\n");
-    
+
     while(true)
 	halt();
 
