@@ -19,6 +19,14 @@
 	hang();							\
     }while(0)
 
+// ASSERT
+#define ASSERT(expr) if(!(expr)){				\
+	console_printErr("ASSERT FAILED: "__FILE__": ");	\
+	console_printNum(__LINE__,10);				\
+	console_print(": "#expr"\n");				\
+    }
+
+
 // Assembly functions
 extern uint32_t __getCR0(void);
 extern uint32_t __getCR1(void);

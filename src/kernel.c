@@ -91,7 +91,7 @@ void kernel_main(__UNUSED uint32_t a, __UNUSED uint32_t magic){
     console_printInfo("Heap allocated up to: 0x");
     console_printNum(heap_getHeapAddress(), 16);
     console_print("\n");
-
+    
     while(true)
 	halt();
 

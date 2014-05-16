@@ -5,6 +5,8 @@
 extern uint32_t _kernelEnd;		 // defined in linker.ld
 uint32_t _heapAddress = (uint32_t)&_kernelEnd; //0x01000000;
 
+uint32_t heap_getHeapAddress(void){ return _heapAddress; }
+
 uint32_t heap_allocate(uint32_t size, bool align, uint32_t phys){
     if(align && (_heapAddress & 0xFFF)){ // if unaligned, align the memory
 	_heapAddress += 0x1000; // each page is 0x1000 bytes
@@ -17,5 +19,3 @@ uint32_t heap_allocate(uint32_t size, bool align, uint32_t phys){
     _heapAddress += size;
     return addr;
 }
-
-uint32_t heap_getHeapAddress(void){ return _heapAddress; }
