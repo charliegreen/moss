@@ -1,0 +1,11 @@
+.hg
+bochsout.txt
+bochsrc.txt
+cross-compiler
+dist
+examples
+src-old
+src/*.o
+src/isodir
+src/moss.bin
+src/setup-env

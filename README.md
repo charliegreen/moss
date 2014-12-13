@@ -13,8 +13,10 @@ Shorter term:
 * Proper time and date (probably Epoch-style)
 * Proper handling of all keypresses, including multi-byte scancodes
 * Memory management
-	* Paging
+	* Paging (does it work yet?)
+	* Dynamic allocation/freeing
 * General code cleanup
+* Figure out what the RandomWhiteRectangles bug is all about
 
 Longer term:
 
