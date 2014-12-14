@@ -163,26 +163,6 @@ void console_printNum(uint32_t num, uint32_t radix){
     console_print(digits);
 }
 
-void console_printInfo(const char*data){
-    console_print("70[30info70] ");
-    console_print(data);
-}
-
-void console_printOk(const char*data){
-    console_print("70[20 ok 70] ");
-    console_print(data);    
-}
-
-void console_printWarn(const char*data){
-    console_print("70[40warn70] ");
-    console_print(data);
-}
-
-void console_printErr(const char*data){
-    console_print("70[A0ERR!70] ");
-    console_print(data);
-}
-
 //================================
 // Miscellaneous functions:
 

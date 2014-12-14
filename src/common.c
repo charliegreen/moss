@@ -79,7 +79,7 @@ int32_t printf(const char*fmt, ...){
     uint32_t*args = (uint32_t*)&fmt;
     size_t argi = 1;		// index into args
     size_t written = 0;
-    
+
     for(size_t fmti = 0; fmt[fmti]; fmti++){
 	if(fmt[fmti] == '%'){	// -------------------------------- FOUND FORMAT REQUEST
 	    // Note: this list should match the switch below
@@ -154,6 +154,14 @@ int32_t printf(const char*fmt, ...){
 	    }
 
 	    fmti += infolen+1;	// skip over info and format specifier
+	}else if(fmt[fmti] == '' && fmt[fmti+1] && fmt[fmti+2]){
+				// -------------------------------- COLOR CODE
+	    // Copy the color code over and let console_print figure it out for us
+	    char copy[4];
+	    memcpy(copy, &fmt[fmti], 3);
+	    copy[3] = 0;
+	    console_print(copy);
+	    fmti+=2;
 	}else{	  // -------------------------------- SIMPLE CHARACTER
 	    putchar(fmt[fmti]);
 	    written++;

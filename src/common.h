@@ -11,7 +11,7 @@
 
 #include "console.h"
 
-// Halt and Catch Fire
+// ================================================================ Halt and Catch Fire
 #define HCF(s) do{						\
 	console_printErr("40HCF: "__FILE__": ");		\
 	console_printNum(__LINE__,10);				\
@@ -19,24 +19,25 @@
 	hang();							\
     }while(0)
 
-// ASSERT
+// ================================================================ ASSERT
 #define ASSERT(expr) if(!(expr)){				\
 	console_printErr("ASSERT FAILED: "__FILE__": ");	\
 	console_printNum(__LINE__,10);				\
 	console_print(": "#expr"\n");				\
     }
 
-// Assembly functions
+// ================================================================ Assembly functions
 extern uint32_t __getCR0(void);
 extern uint32_t __getCR1(void);
 extern uint32_t __getCR2(void);
 extern uint32_t __getCR3(void);
 extern uint32_t __getCR4(void);
 
-extern uint32_t __get_stack_top(void);
-extern uint32_t __get_stack_bottom(void);
+extern uint32_t __get_stack_top(void); // get top of stack
+extern uint32_t __get_stack_bottom(void); // get bottom of stack (minimum stack value)
+extern uint32_t __get_stack(void); // get current stack pointer (doesn't modify stack frame)
 
-// `stdlib' functions
+// ================================================================ "stdlib" functions
 size_t strlen(const char*str);
 size_t strlenesc(const char*str);
 void strncpy(char*s1, const char*s2, size_t n);
@@ -46,6 +47,7 @@ uint8_t ctox(char c);
 uint32_t atoi(const char*buf);
 uint32_t pow(uint32_t a, uint32_t b);
 
+// ------------------------------------------------ printf variants
 /* Documentation on *printf:
    %s, %Ns	Print a string. If N, pad the string with spaces to have a minimum
    		length of N.
@@ -57,13 +59,18 @@ uint32_t pow(uint32_t a, uint32_t b);
 size_t snprintf(char*buf, size_t n, const char*fmt, ...); // TODO
 int32_t printf(const char*fmt, ...);
 
-// Memory allocation wrappers
+#define printfInfo(fmt, args...)	printf(CONSOLE_STR_INFO	fmt, ##args)
+#define printfOk(fmt, args...)		printf(CONSOLE_STR_OK	fmt, ##args)
+#define printfWarn(fmt, args...)	printf(CONSOLE_STR_WARN	fmt, ##args)
+#define printfErr(fmt, args...) 	printf(CONSOLE_STR_ERR	fmt, ##args)
+
+// ================================================================ Memory allocation wrappers
 uint32_t kmalloc(uint32_t size);
 uint32_t kamalloc(uint32_t size);
 uint32_t kpmalloc(uint32_t size, uint32_t phys);
 uint32_t kapmalloc(uint32_t size, uint32_t phys);
 
-// Miscellaneous utility functions
+// ================================================================ Miscellaneous utility functions
 void halt(void);
 void hang(void);
 

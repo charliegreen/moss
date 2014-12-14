@@ -38,16 +38,22 @@ void console_print(const char*data);
 void console_printToLoc(const char*data, uint16_t*loc, size_t n);
 void console_printNum(uint32_t num, uint32_t radix);
 
-void console_printInfo(const char*data);
-void console_printOk(const char*data);
-void console_printWarn(const char*data);
-void console_printErr(const char*data);
-
 void console_displayColors(void);
 void console_displayCharacters(void);
 void console_backspace(void);
 
 void console_toggleCursorColor(void);
+
+// For convenience:
+#define CONSOLE_STR_INFO "70[30info70] "
+#define CONSOLE_STR_OK	 "70[20 ok 70] "
+#define CONSOLE_STR_WARN "70[40warn70] "
+#define CONSOLE_STR_ERR  "70[A0ERR!70] "
+
+#define console_printInfo(data) console_print(CONSOLE_STR_INFO	data)
+#define console_printOk(data)	console_print(CONSOLE_STR_OK	data)
+#define console_printWarn(data)	console_print(CONSOLE_STR_WARN	data)
+#define console_printErr(data)	console_print(CONSOLE_STR_ERR	data)
 
 #define putchar(c) console_putChar(c)
 

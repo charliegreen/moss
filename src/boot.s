@@ -215,6 +215,14 @@ __get_stack_top:
 	ret
 	.size __get_stack_top, .-__get_stack_top
 
+	.global __get_stack
+	.type __get_stack, @function
+__get_stack:
+	# Add 4 to %esp to compensate for our return address
+	leal	4(%esp), %eax
+	ret
+	.size __get_stack, .-__get_stack
+
 # ================================================================
 # _start is the entry point for our kernel
 # ================================================================	
@@ -229,6 +237,8 @@ _start:
 	pushl %eax
 	pushl %ebx
 
+	# Note that we don't expect kernel_main to ever return
+	# TODO save stack space by not passing return address &c to kernel_main?
 	call kernel_main
 
 label_hang:
