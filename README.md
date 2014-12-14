@@ -16,7 +16,7 @@ Shorter term:
 	* Paging (does it work yet?)
 	* Dynamic allocation/freeing
 * General code cleanup
-* Figure out what the RandomWhiteRectangles bug is all about
+* Figure out what the White Rectangle Bug is all about
 
 Longer term:
 

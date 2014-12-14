@@ -49,4 +49,6 @@ void console_backspace(void);
 
 void console_toggleCursorColor(void);
 
+#define putchar(c) console_putChar(c)
+
 #endif

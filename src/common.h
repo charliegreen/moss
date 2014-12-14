@@ -26,7 +26,6 @@
 	console_print(": "#expr"\n");				\
     }
 
-
 // Assembly functions
 extern uint32_t __getCR0(void);
 extern uint32_t __getCR1(void);
@@ -42,7 +41,21 @@ size_t strlen(const char*str);
 size_t strlenesc(const char*str);
 void strncpy(char*s1, const char*s2, size_t n);
 void memset(void*address, uint8_t byte, size_t len);
+void*memcpy(void*dst, const void*src, size_t n);
 uint8_t ctox(char c);
+uint32_t atoi(const char*buf);
+uint32_t pow(uint32_t a, uint32_t b);
+
+/* Documentation on *printf:
+   %s, %Ns	Print a string. If N, pad the string with spaces to have a minimum
+   		length of N.
+   %d		Print an integer in base 10.
+   %x		Print an integer in base 16.
+   %b, %Nb	Print an integer; N specifies the base. If N isn't specified,
+   		%b defaults to binary.
+ */
+size_t snprintf(char*buf, size_t n, const char*fmt, ...); // TODO
+int32_t printf(const char*fmt, ...);
 
 // Memory allocation wrappers
 uint32_t kmalloc(uint32_t size);
